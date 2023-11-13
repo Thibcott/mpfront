@@ -1,0 +1,48 @@
+<!-- main page when you start the application -->
+<h1>mpfront</h1>
+<p-table #myTab [value]="data" [globalFilterFields]="['id', 'data.nom', 'data.prenom']">
+  <ng-template pTemplate="caption">
+    <div style="display: flex;">
+      <div style="text-align: left; width: 50%;">
+        <button pButton type="button" icon="pi pi-plus" class="p-button-rounded" 
+         pTooltip="Ajout d'une nouvelle personne" (click)="addPersonne()"
+         >
+        </button>
+      </div>
+      <div style="text-align: right; width: 50%;">
+        <i class="pi pi-search" style="margin:4px 4px 0 0"> </i>
+        <input type="text" pInputText size="50" placeholder="Global Filter"
+          (input)="myTab.filterGlobal($event.target.value, 'contains')" style="width:auto" />
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-personne>
+    <tr>
+      <td>{{ personne.id }}</td>
+      <td>{{ personne.data.nom }}</td>
+      <td>{{ personne.data.prenom }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- dialog for add personne to the system -->
+
+<p-dialog header="Ajout d'une personne dans le systeme" [(visible)]="dialogPersonne" [modal]="true" width="100%"
+[draggable]="false"> 
+    
+  <p>Angular PrimeNG Dialog Component</p> 
+    
+  </p-dialog>
+
+<!-- temp for debugguing-->
+<div *ngIf="data">
+  <h2>Données récupérées :</h2>
+  <pre>{{ data | json }}</pre>
+</div>
