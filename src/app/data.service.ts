@@ -10,15 +10,26 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
+  status: any;
+  
   // Méthode pour effectuer une requête HTTP GET et récupérer les données
   public getData() {
     const url = 'http://localhost:3000/getPersonnes'; 
     return this.http.get(url);
   }
 
-  public postD(data: any) {
-    const apiUrl = 'http://localhost:3000/api/addD'; 
+  public addData(data:any) {
+    const apiUrl = 'http://localhost:3000/addPersonne'; 
     return this.http.post(apiUrl, data);
+  }
+
+  public deletePersonne(personne:any) {
+    this.http.delete(`http://localhost:3000/deletePersonne/${personne}`).subscribe(() => {
+      this.status = 'Delete successful';
+    }, (error: any) => {
+      console.log(error);
+      return error
+    });
   }
 
 }

@@ -1,12 +1,12 @@
 <!-- main page when you start the application -->
 <h1>mpfront</h1>
-<p-table #myTab [value]="data" [globalFilterFields]="['id', 'data.nom', 'data.prenom']">
+<p-table #myTab [value]="data"
+  [globalFilterFields]="['id', 'data.nom', 'data.prenom','data.Adress','data.contact','data.AVS']">
   <ng-template pTemplate="caption">
     <div style="display: flex;">
       <div style="text-align: left; width: 50%;">
-        <button pButton type="button" icon="pi pi-plus" class="p-button-rounded" 
-         pTooltip="Ajout d'une nouvelle personne" (click)="addPersonne()"
-         >
+        <button pButton type="button" icon="pi pi-plus" class="p-button-rounded"
+          pTooltip="Ajout d'une nouvelle personne" (click)="showDialogAddPersonne()">
         </button>
       </div>
       <div style="text-align: right; width: 50%;">
@@ -19,30 +19,154 @@
   <ng-template pTemplate="header">
     <tr>
       <th>ID</th>
+      <th>Genre / Titre</th>
       <th>Nom</th>
       <th>Prénom</th>
+      <th>Adresse</th>
+      <th>Contact</th>
+      <th>AVS</th>
+      <th></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-personne>
     <tr>
       <td>{{ personne.id }}</td>
+      <td>{{ personne.data.genre }}</td>
       <td>{{ personne.data.nom }}</td>
       <td>{{ personne.data.prenom }}</td>
+      <td>{{ personne.data.Adress }}</td>
+      <td>{{ personne.data.contact }}</td>
+      <td>{{ personne.data.AVS }}</td>
+      <td>
+        <button pButton icon="pi pi-user-edit" class="p-button-rounded p-button-text" pTooltip="Modification"
+          (click)="showDialogEditPersonne(personne)">
+        </button>
+        <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-danger p-button-text" pTooltip="Suppression"
+          (click)="deletePersonne(personne)">
+        </p-button>
+        <p-button icon="pi pi-print" styleClass="p-button-rounded p-button-warning p-button-text" pTooltip="Imprimer fiche de salaire"
+          (click)="print(personne)">
+        </p-button>
+      </td>
+
+
     </tr>
   </ng-template>
 </p-table>
+<!-- Confimration -->
+<p-confirmDialog [style]="{width: '60vw'}"></p-confirmDialog>
+<!-- toast -->
+<p-toast></p-toast>
 
 <!-- dialog for add personne to the system -->
+<p-dialog header="Ajout d'une personne dans le systeme" [(visible)]="dialogAddPersonne" [modal]="true" width="100%"
+  [draggable]="false">
+  <table style="width: 100%;">
+    <tr>
+      <td>Genre/Titre</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Genre">
+      </td>
+    </tr>
+    <tr>
+      <td>Prenom</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Prenom">
+      </td>
+    </tr>
+    <tr>
+      <td>Nom</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Nom">
+      </td>
+    </tr>
+    <tr>
+      <td>Contact</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Contact">
+      </td>
+    </tr>
+    <tr>
+      <td>AVS</td>
+      <td align="right">
+        <p-inputMask mask="999.9999.9999.99" [(ngModel)]="AVS" placeholder="999.9999.9999.99"></p-inputMask>
+      </td>
+    </tr>
+    <tr>
+      <td>Adresse</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Adresse">
+      </td>
+    </tr>
+    <br>
+    <br>
+    <tr>
+      <td colspan="2" align="center">
+        <p-button label="Valider l'ajout" styleClass="p-button-raised" (click)="addPersonne()"></p-button>
+      </td>
 
-<p-dialog header="Ajout d'une personne dans le systeme" [(visible)]="dialogPersonne" [modal]="true" width="100%"
-[draggable]="false"> 
-    
-  <p>Angular PrimeNG Dialog Component</p> 
-    
-  </p-dialog>
+    </tr>
+  </table>
 
+</p-dialog>
+
+
+<!-- dialog for edit personne to the system -->
+<p-dialog header="Modification d'une personne dans le systeme" [(visible)]="dialogEditPersonne" [modal]="true" width="100%"
+  [draggable]="false">
+  <table style="width: 100%;">
+    <tr>
+      <td>Genre/Titre</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Genre">
+      </td>
+    </tr>
+    <tr>
+      <td>Prenom</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Prenom">
+      </td>
+    </tr>
+    <tr>
+      <td>Nom</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Nom">
+      </td>
+    </tr>
+    <tr>
+      <td>Contact</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Contact">
+      </td>
+    </tr>
+    <tr>
+      <td>AVS</td>
+      <td align="right">
+        <p-inputMask mask="999.9999.9999.99" [(ngModel)]="AVS" placeholder="999.9999.9999.99"></p-inputMask>
+      </td>
+    </tr>
+    <tr>
+      <td>Adresse</td>
+      <td align="right">
+        <input type="text" pInputText [(ngModel)]="Adresse">
+      </td>
+    </tr>
+    <br>
+    <br>
+    <tr>
+      <td colspan="2" align="center">
+        <p-button label="Valider l'ajout" styleClass="p-button-raised" (click)="addPersonne()"></p-button>
+      </td>
+    </tr>
+  </table>
+</p-dialog>
+
+
+<footer class="footer">
+  <p>Developed by Thibcott</p>
+</footer>
 <!-- temp for debugguing-->
-<div *ngIf="data">
+<!-- <div *ngIf="data">
   <h2>Données récupérées :</h2>
   <pre>{{ data | json }}</pre>
-</div>
+</div> -->
