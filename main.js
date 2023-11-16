@@ -7,9 +7,9 @@ function createWindow() {
   // Crée une fenêtre de navigateur.
   win = new BrowserWindow({
     width: 1500,
-    height: 1000,
+    height: 1300,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: false
     }
   });
 

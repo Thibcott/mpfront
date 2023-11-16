@@ -1,5 +1,5 @@
 <!-- main page when you start the application -->
-<h1>mpfront</h1>
+<h1>Salaire PXE</h1>
 <p-table #myTab [value]="data"
   [globalFilterFields]="['id', 'data.nom', 'data.prenom','data.Adress','data.contact','data.AVS']">
   <ng-template pTemplate="caption">
@@ -207,52 +207,55 @@
     </tr>
     <tr>
       <td>Cotisation AVS/AIAPG</td>
-      <td></td>
+      <td><input type="number" pInputText [(ngModel)]="avsaiapg" (input)="calcSal()"></td>
       <td>{{totBrut}}</td>
-      <td></td>
+      <td>{{avsaiapgM}}</td>
     </tr>
     <tr>
       <td>Cotisation AC</td>
-      <td></td>
+      <td><input type="number" pInputText [(ngModel)]="ac" (input)="calcSal()"></td>
       <td>{{totBrut}}</td>
-      <td></td>
+      <td>{{acM}}</td>
     </tr>
+
     <tr>
       <td>AANP</td>
-      <td></td>
+      <td><input type="number" pInputText [(ngModel)]="aanp" (input)="calcSal()"></td>
       <td>{{totBrut}}</td>
-      <td></td>
+      <td>{{aanpM}}</td>
     </tr>
     <tr>
-      <td>ParticpationAFAM</td>
-      <td></td>
+      <td>Particpation AFAM</td>
+      <td><input type="number" pInputText [(ngModel)]="afam" (input)="calcSal()"></td>
       <td>{{totBrut}}</td>
-      <td></td>
+      <td>{{afamM}}</td>
     </tr>
     <tr>
       <td>LPP</td>
-      <td></td>
-      <td>{{totBrut}}</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>AC1</td>
-      <td></td>
-      <td>{{totBrut}}</td>
-      <td></td>
+      <td><input type="number" pInputText [(ngModel)]="lpp" (input)="calcSal()"></td>
+      <td>{{totBrut}} </td>
+      <td>{{lppM}}</td>
     </tr>
     <tr>
       <td>Impôts source</td>
-      <td></td>
+      <td><input type="number" pInputText [(ngModel)]="impotSource" (input)="calcSal()"></td>
       <td>{{totBrut}}</td>
-      <td></td>
+      <td>{{impotSourceM}}</td>
     </tr>
     <tr>
       <td><i>Total des déductions sociales </i></td>
       <td></td>
       <td></td>
-      <td></td>
+      <td>-{{totdeductions}}</td>
     </tr>
+
+    <tr>
+      <th>Salaire Net</th>
+      <th></th>
+      <th></th>
+      <th>{{salaireNet}}</th>
+    </tr>
+
   </table>
  
   <br>

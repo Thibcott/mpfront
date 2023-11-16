@@ -38,14 +38,33 @@ export class AppComponent implements OnInit {
   moisListe: SelectItem[]; // Liste des mois
   moisSelectionne: any; // Mois sélectionné
 
-  workHour:number=0;
-  base:number=22;
-  salaireHoraire:number=0;
-  pourcentVac:number= 10.64;
-  suppVac:number=0;
-  totBrut:number=0;
-  
+  workHour: number = 0;//temp remettre a 0 en fin de dev
+  base: number = 22;
+  salaireHoraire: number = 0;
+  pourcentVac: number = 10.64;
+  suppVac: number = 0;
 
+  totBrut: number = 0;//
+
+  avsaiapg: number = 5.3;
+  ac: number = 1.1;
+  aanp: number = 1.38
+  afam: number = 0.421;
+  impotSource: number = 0.85;
+  lpp: number = 3.18;
+
+  avsaiapgM: number = 0;
+  acM: number = 0;
+  aanpM: number = 0;
+  afamM: number = 0;
+  impotSourceM: number = 0;
+  lppM: number = 0;
+
+  totdeductions: number = 0;
+
+  salaireNet: number = 0;
+
+  
 
   constructor(private dataService: DataService,
     private confirmationService: ConfirmationService,
@@ -57,13 +76,29 @@ export class AppComponent implements OnInit {
     this.getPersonnes();
     this.initialiserMois();
     this.getPersonnes();
+    //enlever apres 
+    this.calcSal();
+  }
+  //calculate data of tab
+  calcSal() {
+    this.salaireHoraire = Number((this.workHour * this.base).toFixed(2));
+    this.suppVac = Number(((this.salaireHoraire / 100) * this.pourcentVac).toFixed(2));
+    this.totBrut = this.salaireHoraire + this.suppVac;
+
+    this.avsaiapgM = Number(((this.totBrut / 100) * this.avsaiapg).toFixed(2))
+    this.acM = Number(((this.totBrut / 100) * this.ac).toFixed(2))
+    this.aanpM = Number(((this.totBrut / 100) * this.aanp).toFixed(2))
+    this.afamM = Number(((this.totBrut / 100) * this.afam).toFixed(2))
+    this.impotSourceM = Number(((this.totBrut / 100) * this.impotSource).toFixed(2))
+    this.lppM = Number(((this.totBrut / 100) * this.lpp).toFixed(2))
+
+    this.totdeductions = Number((this.avsaiapgM + this.acM + this.aanpM + this.afamM + this.impotSourceM + this.lppM).toFixed(2));
+
+    this.salaireNet = Number((this.totBrut - this.totdeductions).toFixed(2))
   }
 
-  calcSal(){
-    this.salaireHoraire = Number((this.workHour*this.base).toFixed(2));
-    this.suppVac = Number(((this.salaireHoraire/100)*this.pourcentVac).toFixed(2));
-    this.totBrut= this.salaireHoraire+this.suppVac;
-  }
+
+
 
   initialiserMois() {
     const dateActuelle = new Date();
@@ -187,10 +222,6 @@ export class AppComponent implements OnInit {
     })
   }
 
-
- 
-
-
   showPrint(element) {
     this.dialogPrint = true;
 
@@ -202,15 +233,67 @@ export class AppComponent implements OnInit {
     this.AVS = element.data.AVS
     this.Adresse = element.data.Adress
 
+    this.workHour = 0;
+    this.base = 22;
+    this.salaireHoraire = 0;
+    this.pourcentVac = 10.64;
+    this.suppVac = 0;
 
+    this.totBrut = 0;//
 
+    this.avsaiapg = 5.3;
+    this.ac = 1.1;
+    this.aanp = 1.38
+    this.afam = 0.421;
+    this.impotSource = 0.85;
+    this.lpp = 4.5;
+    this.avsaiapgM = 0;
+    this.acM = 0;
+    this.aanpM = 0;
+    this.afamM = 0;
+    this.impotSourceM = 0;
+    this.lppM = 0;
+    this.totdeductions = 0;
   }
 
   print() {
     console.log("print !")
-    console.log('Mois sélectionné : ', this.moisSelectionne);
+    console.log('Mois sélectionné : ', this.moisSelectionne.label);
+    //construction d un json
+    let fiche = {
+      "genre": this.Genre,
+      "prenom": this.Prenom,
+      "nom": this.Nom,
+      "contact": this.Contact,
+      "date": this.dateFormatee,
+      "avs": this.AVS,
+      "mois": this.moisSelectionne.label,
+      "annee": this.annee,
+      "workHour": this.workHour,
+      "base": this.base,
+      "salaireHoraire": this.salaireHoraire,
+      "suppVac": this.suppVac,
+      "totBrut": this.totBrut,
+      "avsaiapg":this.avsaiapg,
+      "ac":this.ac,
+      "aanp":this.aanp,
+      "afam":this.afam,
+      "lpp":this.lpp,
+      "impotSource":this.impotSource,
+      "avsaiapgM":this.avsaiapgM,
+      "acM":this.acM,
+      "aanpM":this.aanpM,
+      "afamM":this.afamM,
+      "lppM":this.lppM,
+      "impotSourceM":this.impotSourceM,
+      "totDeductions":this.totdeductions,
+      "SalaireNet":this.salaireNet
+    }
+    console.log(fiche);
     // envoie des données a l api 
-
+    
+    //fin 
+    this.setDefault();
   }
 
   setDefault() {
