@@ -5,7 +5,7 @@ import { PrimeNGConfig, ConfirmationService } from 'primeng/api';
 import { MessageService, ConfirmEventType } from 'primeng/api';
 import { SelectItem } from 'primeng/api';
 
-
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-root',
@@ -259,7 +259,6 @@ export class AppComponent implements OnInit {
   print() {
     console.log("print !")
     console.log('Mois sélectionné : ', this.moisSelectionne.label);
-    //construction d un json
     let fiche = {
       "genre": this.Genre,
       "prenom": this.Prenom,
@@ -272,6 +271,7 @@ export class AppComponent implements OnInit {
       "workHour": this.workHour,
       "base": this.base,
       "salaireHoraire": this.salaireHoraire,
+      "pourcentVac": this.pourcentVac,
       "suppVac": this.suppVac,
       "totBrut": this.totBrut,
       "avsaiapg":this.avsaiapg,
@@ -290,9 +290,22 @@ export class AppComponent implements OnInit {
       "SalaireNet":this.salaireNet
     }
     console.log(fiche);
-    // envoie des données a l api 
+
+    this.dataService.print(fiche).subscribe(
+      (responseBlob: Blob) => {
+        const filename = 'fiche_salaire_de_'+ fiche.nom + '_' + fiche.prenom + '.pdf';
+        saveAs(responseBlob, filename);
     
-    //fin 
+        this.dialogPrint = false;
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `Construction en cours de la fiche de salaire de ${fiche.nom} ${fiche.prenom}.` });
+        this.setDefault();
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération du fichier PDF:', error);
+        this.messageService.add({ severity: 'error', summary: 'Erreurs', detail: `La fiche de salaire de ${fiche.nom} ${fiche.prenom} n'a pas pu être construite.` });
+      }
+    );
+    
     this.setDefault();
   }
 

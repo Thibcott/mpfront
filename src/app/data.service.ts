@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root' // Vous pouvez utiliser 'root' pour enregistrer le service au niveau de l'application
@@ -18,10 +20,25 @@ export class DataService {
     return this.http.get(url);
   }
 
+  // public print(data:any) {
+  //   const apiUrl = 'http://localhost:3000/generate-pdf'; 
+  //   return this.http.post(apiUrl, data);
+  // }
+  public print(dataToSend: any): Observable<Blob> {
+    const apiUrl = 'http://localhost:3000/generate-pdf'; 
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http.post(apiUrl, dataToSend, {
+      headers: headers,
+      responseType: 'blob'
+    });
+  }
+
   public addData(data:any) {
     const apiUrl = 'http://localhost:3000/addPersonne'; 
     return this.http.post(apiUrl, data);
   }
+
 
   public editPersonne(personne:any,id:number) {
     // console.log(personne)
