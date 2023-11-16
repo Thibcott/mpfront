@@ -23,6 +23,13 @@ export class DataService {
     return this.http.post(apiUrl, data);
   }
 
+  public editPersonne(personne:any,id:number) {
+    // console.log(personne)
+    const apiUrl = `http://localhost:3000/updatePersonne/${id}`; 
+    return this.http.put(apiUrl, personne);
+
+  }
+
   public deletePersonne(personne:any) {
     this.http.delete(`http://localhost:3000/deletePersonne/${personne}`).subscribe(() => {
       this.status = 'Delete successful';

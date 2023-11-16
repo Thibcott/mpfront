@@ -22,21 +22,21 @@
       <th>Genre / Titre</th>
       <th>Nom</th>
       <th>Prénom</th>
-      <th>Adresse</th>
-      <th>Contact</th>
+      <!-- <th>Adresse</th> -->
+      <th>Contact / Adresse</th>
       <th>AVS</th>
       <th></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-personne>
     <tr>
-      <td>{{ personne.id }}</td>
-      <td>{{ personne.data.genre }}</td>
-      <td>{{ personne.data.nom }}</td>
-      <td>{{ personne.data.prenom }}</td>
-      <td>{{ personne.data.Adress }}</td>
+      <td>{{ personne.id }} </td>
+      <td>{{ personne.data.genre }} </td>
+      <td>{{ personne.data.nom }} </td>
+      <td>{{ personne.data.prenom }} </td>
+      <!-- <td>{{ personne.data.Adress }}</td> -->
       <td>{{ personne.data.contact }}</td>
-      <td>{{ personne.data.AVS }}</td>
+      <td>{{ personne.data.AVS }} </td>
       <td>
         <button pButton icon="pi pi-user-edit" class="p-button-rounded p-button-text" pTooltip="Modification"
           (click)="showDialogEditPersonne(personne)">
@@ -44,8 +44,8 @@
         <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-danger p-button-text" pTooltip="Suppression"
           (click)="deletePersonne(personne)">
         </p-button>
-        <p-button icon="pi pi-print" styleClass="p-button-rounded p-button-warning p-button-text" pTooltip="Imprimer fiche de salaire"
-          (click)="print(personne)">
+        <p-button icon="pi pi-print" styleClass="p-button-rounded p-button-warning p-button-text"
+          pTooltip="Imprimer fiche de salaire" (click)="showPrint(personne)">
         </p-button>
       </td>
 
@@ -92,12 +92,12 @@
         <p-inputMask mask="999.9999.9999.99" [(ngModel)]="AVS" placeholder="999.9999.9999.99"></p-inputMask>
       </td>
     </tr>
-    <tr>
+    <!-- <tr>
       <td>Adresse</td>
       <td align="right">
         <input type="text" pInputText [(ngModel)]="Adresse">
       </td>
-    </tr>
+    </tr> -->
     <br>
     <br>
     <tr>
@@ -112,8 +112,8 @@
 
 
 <!-- dialog for edit personne to the system -->
-<p-dialog header="Modification d'une personne dans le systeme" [(visible)]="dialogEditPersonne" [modal]="true" width="100%"
-  [draggable]="false">
+<p-dialog header="Modification d'une personne dans le systeme" [(visible)]="dialogEditPersonne" [modal]="true"
+  width="100%" [draggable]="false">
   <table style="width: 100%;">
     <tr>
       <td>Genre/Titre</td>
@@ -145,25 +145,127 @@
         <p-inputMask mask="999.9999.9999.99" [(ngModel)]="AVS" placeholder="999.9999.9999.99"></p-inputMask>
       </td>
     </tr>
-    <tr>
+    <!-- <tr>
       <td>Adresse</td>
       <td align="right">
         <input type="text" pInputText [(ngModel)]="Adresse">
       </td>
-    </tr>
+    </tr> -->
     <br>
     <br>
     <tr>
       <td colspan="2" align="center">
-        <p-button label="Valider l'ajout" styleClass="p-button-raised" (click)="addPersonne()"></p-button>
+        <p-button label="Valider la modification" styleClass="p-button-raised" (click)="  editPersonne()"></p-button>
       </td>
     </tr>
   </table>
 </p-dialog>
 
+<!-- dialog for print -->
+<p-dialog header="Fiche de salaire de " [(visible)]="dialogPrint" [modal]="true" width="100%" [draggable]="false">
+  <h2>{{ Genre }} {{ Nom }} {{ Prenom }}</h2>
+  <h3>{{dateFormatee}}</h3>
+  <!-- ici mettre la dropdown  -->
+  <h3>Décompte de Salaire
+    <p-dropdown [options]="moisListe" [(ngModel)]="moisSelectionne" optionLabel="label"></p-dropdown>
+    <input type="number" pInputText [(ngModel)]="annee">
+  </h3>
+
+
+  <table class="custom-table">
+    <tr style="text-align: left;">
+      <th>Salaire brut</th>
+      <th>Coeff./taux</th>
+      <th>Base, Salaire</th>
+      <th>Montant</th>
+    </tr>
+    <tr>
+      <td>Salaire horaire</td>
+      <td> <input type="number" pInputText [(ngModel)]="workHour" (input)="calcSal()"> </td>
+      <td> <input type="number" pInputText [(ngModel)]="base" (input)="calcSal()"></td>
+      <td>{{salaireHoraire}}</td>
+    </tr>
+    <tr>
+      <td>Supplément vacances</td>
+      <td> <input type="number" pInputText [(ngModel)]="pourcentVac" (input)="calcSal()"></td>
+      <td>%</td>
+      <td>{{suppVac}}</td>
+    </tr>
+    <tr>
+      <td><i>Sous total brut</i></td>
+      <td></td>
+      <td></td>
+      <td>{{totBrut}}</td>
+    </tr>
+    <br>
+    <!--  -->
+    <tr>
+      <th>Charges sociales</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>Cotisation AVS/AIAPG</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Cotisation AC</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>AANP</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>ParticpationAFAM</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>LPP</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>AC1</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Impôts source</td>
+      <td></td>
+      <td>{{totBrut}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><i>Total des déductions sociales </i></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+ 
+  <br>
+  <br>
+  <br><br><br>
+  <p-button label="Valider la fiche de salaire" styleClass="p-button-raised" (click)="  print()"></p-button>
+
+
+</p-dialog>
+
 
 <footer class="footer">
-  <p>Developed by Thibcott</p>
+  <p>Developed by Thibcott - 2023</p>
 </footer>
 <!-- temp for debugguing-->
 <!-- <div *ngIf="data">
