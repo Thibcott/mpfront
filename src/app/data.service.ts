@@ -20,10 +20,7 @@ export class DataService {
     return this.http.get(url);
   }
 
-  // public print(data:any) {
-  //   const apiUrl = 'http://localhost:3000/generate-pdf'; 
-  //   return this.http.post(apiUrl, data);
-  // }
+
   public print(dataToSend: any): Observable<Blob> {
     const apiUrl = 'http://localhost:3000/generate-pdf'; 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

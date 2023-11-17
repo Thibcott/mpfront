@@ -11,7 +11,7 @@
       </div>
       <div style="text-align: right; width: 50%;">
         <i class="pi pi-search" style="margin:4px 4px 0 0"> </i>
-        <input type="text" pInputText size="50" placeholder="Global Filter"
+        <input type="text" pInputText size="50" placeholder="Recherche"
           (input)="myTab.filterGlobal($event.target.value, 'contains')" style="width:auto" />
       </div>
     </div>
@@ -197,8 +197,6 @@
       <td></td>
       <td>{{totBrut}}</td>
     </tr>
-    <br>
-    <!--  -->
     <tr>
       <th>Charges sociales</th>
       <th></th>
@@ -259,9 +257,10 @@
   </table>
  
   <br>
-  <br>
-  <br><br><br>
-  <p-button label="Valider la fiche de salaire" styleClass="p-button-raised" (click)="  print()"></p-button>
+  <div style="text-align: center;">
+    <p-button label="Valider la fiche de salaire" styleClass="p-button-raised" (click)="  print()"></p-button>
+  </div>
+  
 
 
 </p-dialog>
