@@ -38,34 +38,34 @@ export class AppComponent implements OnInit {
   moisListe: SelectItem[]; // Liste des mois
   moisSelectionne: any; // Mois sélectionné
 
-  workHour: number = 0;//temp remettre a 0 en fin de dev
-  base: number = 22;
-  salaireHoraire: number = 0;
-  divers:number=0;
-  pourcentVac: number = 10.64;
-  suppVac: number = 0;
+  workHour: any = 0;//temp remettre a 0 en fin de dev
+  base: any = 0;
+  salaireHoraire: any = 0;
+  divers: any = 0;
+  pourcentVac: any = 10.64;
+  suppVac: any = 0;
 
-  totBrut: number = 0;//
+  totBrut: any = 0;//
 
-  avsaiapg: number = 5.3;
-  ac: number = 1.1;
-  aanp: number = 1.38
-  afam: number = 0.421;
-  impotSource: number = 0.85;
-  lpp: number = 3.18;
+  avsaiapg: any = 5.3;
+  ac: any = 1.1;
+  aanp: any = 1.38
+  afam: any = 0.421;
+  impotSource: any = 0.85;
+  lpp: any = 3.18;
 
-  avsaiapgM: number = 0;
-  acM: number = 0;
-  aanpM: number = 0;
-  afamM: number = 0;
-  impotSourceM: number = 0;
-  lppM: number = 0;
+  avsaiapgM: any = 0;
+  acM: any = 0;
+  aanpM: any = 0;
+  afamM: any = 0;
+  impotSourceM: any = 0;
+  lppM: any = 0;
 
-  totdeductions: number = 0;
+  totdeductions: any = 0;
 
-  salaireNet: number = 0;
+  salaireNet: any = 0;
 
-  
+
 
   constructor(private dataService: DataService,
     private confirmationService: ConfirmationService,
@@ -80,24 +80,39 @@ export class AppComponent implements OnInit {
     //enlever apres 
     this.calcSal();
   }
-  //calculate data of tab
+ //calculate data of tab
+  // calcSal() {
+  //   this.salaireHoraire = Number((this.workHour * this.base).toFixed(2));
+  //   this.suppVac = Number(((this.salaireHoraire / 100) * this.pourcentVac).toFixed(2));
+  //   this.totBrut = Number((this.salaireHoraire + this.suppVac + this.divers).toFixed(2));
+
+  //   this.avsaiapgM = Number(((this.totBrut / 100) * this.avsaiapg).toFixed(2))
+  //   this.acM = Number(((this.totBrut / 100) * this.ac).toFixed(2))
+  //   this.aanpM = Number(((this.totBrut / 100) * this.aanp).toFixed(2))
+  //   this.afamM = Number(((this.totBrut / 100) * this.afam).toFixed(2))
+  //   this.impotSourceM = Number(((this.totBrut / 100) * this.impotSource).toFixed(2))
+  //   this.lppM = Number(((this.totBrut / 100) * this.lpp).toFixed(2))
+
+  //   this.totdeductions = Number((this.avsaiapgM + this.acM + this.aanpM + this.afamM + this.impotSourceM + this.lppM).toFixed(2));
+
+  //   this.salaireNet = Number((this.totBrut - this.totdeductions).toFixed(2))
+  // }
   calcSal() {
-    this.salaireHoraire = Number((this.workHour * this.base).toFixed(2));
-    this.suppVac = Number(((this.salaireHoraire / 100) * this.pourcentVac).toFixed(2));
-    this.totBrut = Number((this.salaireHoraire + this.suppVac + this.divers).toFixed(2));
+    this.salaireHoraire = (this.workHour * this.base).toFixed(2);
+    this.suppVac = ((Number(this.salaireHoraire) / 100) * this.pourcentVac).toFixed(2);
+    this.totBrut = (Number(this.salaireHoraire) + Number(this.suppVac) + Number(this.divers)).toFixed(2);
 
-    this.avsaiapgM = Number(((this.totBrut / 100) * this.avsaiapg).toFixed(2))
-    this.acM = Number(((this.totBrut / 100) * this.ac).toFixed(2))
-    this.aanpM = Number(((this.totBrut / 100) * this.aanp).toFixed(2))
-    this.afamM = Number(((this.totBrut / 100) * this.afam).toFixed(2))
-    this.impotSourceM = Number(((this.totBrut / 100) * this.impotSource).toFixed(2))
-    this.lppM = Number(((this.totBrut / 100) * this.lpp).toFixed(2))
+    this.avsaiapgM = ((Number(this.totBrut / 100)) * Number(this.avsaiapg)).toFixed(2)
+    this.acM = ((Number(this.totBrut / 100)) * Number(this.ac)).toFixed(2)
+    this.aanpM = ((Number(this.totBrut / 100)) * Number(this.aanp)).toFixed(2)
+    this.afamM = ((Number(this.totBrut / 100)) * Number(this.afam)).toFixed(2)
+    this.impotSourceM = ((Number(this.totBrut) / 100) * Number(this.impotSource)).toFixed(2)
+    this.lppM = ((Number(this.totBrut / 100)) * Number(this.lpp)).toFixed(2)
 
-    this.totdeductions = Number((this.avsaiapgM + this.acM + this.aanpM + this.afamM + this.impotSourceM + this.lppM).toFixed(2));
+    this.totdeductions = (Number(this.avsaiapgM) + Number(this.acM) + Number(this.aanpM) + Number(this.afamM) + Number(this.impotSourceM) + Number(this.lppM)).toFixed(2);
 
-    this.salaireNet = Number((this.totBrut - this.totdeductions).toFixed(2))
+    this.salaireNet =(Number(this.totBrut) - Number(this.totdeductions)).toFixed(2)
   }
-
 
 
   initialiserMois() {
@@ -275,30 +290,30 @@ export class AppComponent implements OnInit {
       "salaireHoraire": this.salaireHoraire,
       "pourcentVac": this.pourcentVac,
       "suppVac": this.suppVac,
-      "divers":this.divers,
+      "divers": this.divers,
       "totBrut": this.totBrut,
-      "avsaiapg":this.avsaiapg,
-      "ac":this.ac,
-      "aanp":this.aanp,
-      "afam":this.afam,
-      "lpp":this.lpp,
-      "impotSource":this.impotSource,
-      "avsaiapgM":this.avsaiapgM,
-      "acM":this.acM,
-      "aanpM":this.aanpM,
-      "afamM":this.afamM,
-      "lppM":this.lppM,
-      "impotSourceM":this.impotSourceM,
-      "totDeductions":this.totdeductions,
-      "SalaireNet":this.salaireNet
+      "avsaiapg": this.avsaiapg,
+      "ac": this.ac,
+      "aanp": this.aanp,
+      "afam": this.afam,
+      "lpp": this.lpp,
+      "impotSource": this.impotSource,
+      "avsaiapgM": this.avsaiapgM,
+      "acM": this.acM,
+      "aanpM": this.aanpM,
+      "afamM": this.afamM,
+      "lppM": this.lppM,
+      "impotSourceM": this.impotSourceM,
+      "totDeductions": this.totdeductions,
+      "SalaireNet": this.salaireNet
     }
     console.log(fiche);
 
     this.dataService.print(fiche).subscribe(
       (responseBlob: Blob) => {
-        const filename = 'fiche_salaire_de_'+ fiche.nom + '_' + fiche.prenom + '.pdf';
+        const filename = 'fiche_salaire_de_' + fiche.nom + '_' + fiche.prenom + '.pdf';
         saveAs(responseBlob, filename);
-    
+
         this.dialogPrint = false;
         this.messageService.add({ severity: 'success', summary: 'Success', detail: `Construction en cours de la fiche de salaire de ${fiche.nom} ${fiche.prenom}.` });
         this.setDefault();
@@ -308,7 +323,7 @@ export class AppComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erreurs', detail: `La fiche de salaire de ${fiche.nom} ${fiche.prenom} n'a pas pu être construite.` });
       }
     );
-    
+
     this.setDefault();
   }
 
