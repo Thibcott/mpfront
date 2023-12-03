@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
   workHour: number = 0;//temp remettre a 0 en fin de dev
   base: number = 22;
   salaireHoraire: number = 0;
+  divers:number=0;
   pourcentVac: number = 10.64;
   suppVac: number = 0;
 
@@ -83,7 +84,7 @@ export class AppComponent implements OnInit {
   calcSal() {
     this.salaireHoraire = Number((this.workHour * this.base).toFixed(2));
     this.suppVac = Number(((this.salaireHoraire / 100) * this.pourcentVac).toFixed(2));
-    this.totBrut = this.salaireHoraire + this.suppVac;
+    this.totBrut = Number((this.salaireHoraire + this.suppVac + this.divers).toFixed(2));
 
     this.avsaiapgM = Number(((this.totBrut / 100) * this.avsaiapg).toFixed(2))
     this.acM = Number(((this.totBrut / 100) * this.ac).toFixed(2))
@@ -96,7 +97,6 @@ export class AppComponent implements OnInit {
 
     this.salaireNet = Number((this.totBrut - this.totdeductions).toFixed(2))
   }
-
 
 
 
@@ -179,7 +179,7 @@ export class AppComponent implements OnInit {
     this.dataService.editPersonne(data, this.id).subscribe((response: any) => {
       // console.log(response.status);
       if (response.status == true) {
-        this.dialogAddPersonne = false;
+        this.dialogEditPersonne = false;
         this.messageService.add({ severity: 'success', summary: 'Success', detail: `${data.nom}  ${data.prenom} a été modifié(e)` });
         this.setDefault();
       } else {
@@ -238,6 +238,7 @@ export class AppComponent implements OnInit {
     this.salaireHoraire = 0;
     this.pourcentVac = 10.64;
     this.suppVac = 0;
+    this.divers = 0;
 
     this.totBrut = 0;//
 
@@ -259,6 +260,7 @@ export class AppComponent implements OnInit {
   print() {
     console.log("print !")
     console.log('Mois sélectionné : ', this.moisSelectionne.label);
+    console.log(this.divers);
     let fiche = {
       "genre": this.Genre,
       "prenom": this.Prenom,
@@ -273,6 +275,7 @@ export class AppComponent implements OnInit {
       "salaireHoraire": this.salaireHoraire,
       "pourcentVac": this.pourcentVac,
       "suppVac": this.suppVac,
+      "divers":this.divers,
       "totBrut": this.totBrut,
       "avsaiapg":this.avsaiapg,
       "ac":this.ac,
