@@ -175,7 +175,7 @@
       <td>{{salaireHoraire}}</td>
     </tr>
     <tr>
-      <td>Supplément vacances</td>
+      <td>Supp. vac. + Jours fériés</td>
       <td> <input type="number" pInputText [(ngModel)]="pourcentVac" (input)="calcSal()"></td>
       <td>%</td>
       <td>{{suppVac}}</td>
@@ -185,6 +185,12 @@
       <td> <input type="number" pInputText [(ngModel)]="divers" (input)="calcSal()"></td>
       <td></td>
       <td>{{divers}}</td>
+    </tr>
+    <tr>
+      <td><input type="text" pInputText [(ngModel)]="freePrompt" (input)="calcSal()" placeholder="Champ libre"></td>
+      <td></td>
+      <td></td>
+      <td><input type="number" pInputText [(ngModel)]="freeMontant" (input)="calcSal()" style="width: 100px; "></td>
     </tr>
     <tr>
       <td><i>Sous total brut</i></td>

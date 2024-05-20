@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root' // Vous pouvez utiliser 'root' pour enregistrer le service au niveau de l'application
+  providedIn: 'root' 
 })
 
 

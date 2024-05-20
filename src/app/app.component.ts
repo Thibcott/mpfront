@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   base: any = 0;
   salaireHoraire: any = 0;
   divers: any = 0;
-  pourcentVac: any = 10.64;
+  pourcentVac: any = 8.83;
   suppVac: any = 0;
 
   totBrut: any = 0;//
@@ -64,6 +64,8 @@ export class AppComponent implements OnInit {
   totdeductions: any = 0;
 
   salaireNet: any = 0;
+  freePrompt: string = "";
+  freeMontant: number;
 
 
 
@@ -100,7 +102,7 @@ export class AppComponent implements OnInit {
   calcSal() {
     this.salaireHoraire = (this.workHour * this.base).toFixed(2);
     this.suppVac = ((Number(this.salaireHoraire) / 100) * this.pourcentVac).toFixed(2);
-    this.totBrut = (Number(this.salaireHoraire) + Number(this.suppVac) + Number(this.divers)).toFixed(2);
+    this.totBrut = (Number(this.salaireHoraire) + Number(this.suppVac) + Number(this.divers) + Number(this.freeMontant)).toFixed(2);
 
     this.avsaiapgM = ((Number(this.totBrut / 100)) * Number(this.avsaiapg)).toFixed(2)
     this.acM = ((Number(this.totBrut / 100)) * Number(this.ac)).toFixed(2)
@@ -168,7 +170,6 @@ export class AppComponent implements OnInit {
       "Adress": this.Adresse
     }
     this.dataService.addData(data).subscribe((response: any) => {
-      // console.log(response.status);
       if (response.status == true) {
         this.dialogAddPersonne = false;
         this.messageService.add({ severity: 'success', summary: 'Success', detail: `${data.nom}  ${data.prenom} a été ajouté(e)` });
@@ -181,7 +182,6 @@ export class AppComponent implements OnInit {
 
   }
   editPersonne() {
-    // console.log(this.id)
     let data = {
       "genre": this.Genre,
       "prenom": this.Prenom,
@@ -215,7 +215,6 @@ export class AppComponent implements OnInit {
   }
 
   deletePersonne(element: any) {
-    // console.log(element.id)
     this.confirmationService.confirm({
       acceptLabel: "Oui",
       rejectLabel: "Non",
@@ -251,11 +250,13 @@ export class AppComponent implements OnInit {
     this.workHour = 0;
     this.base = 22;
     this.salaireHoraire = 0;
-    this.pourcentVac = 10.64;
+    this.pourcentVac = 8.83;
     this.suppVac = 0;
     this.divers = 0;
+    this.freePrompt ="";
+    this.freeMontant =0;
 
-    this.totBrut = 0;//
+    this.totBrut = 0;
 
     this.avsaiapg = 5.3;
     this.ac = 1.1;
@@ -275,8 +276,9 @@ export class AppComponent implements OnInit {
   print() {
     console.log("print !")
     console.log('Mois sélectionné : ', this.moisSelectionne.label);
-    console.log(this.divers);
+    console.log(this.id);
     let fiche = {
+      "idPersonne":this.id,
       "genre": this.Genre,
       "prenom": this.Prenom,
       "nom": this.Nom,
@@ -291,6 +293,8 @@ export class AppComponent implements OnInit {
       "pourcentVac": this.pourcentVac,
       "suppVac": this.suppVac,
       "divers": this.divers,
+      "freePrompt": this.freePrompt,
+      "freeMontant": this.freeMontant,
       "totBrut": this.totBrut,
       "avsaiapg": this.avsaiapg,
       "ac": this.ac,
