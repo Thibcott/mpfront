@@ -13,6 +13,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { DialogModule } from "primeng/dialog";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 
 import { HttpClientModule } from '@angular/common/http'; // Importez HttpClientModule
@@ -35,6 +36,7 @@ import { DataService } from './data.service';
     DialogModule,
     ConfirmDialogModule,
     ToastModule,
+    SelectButtonModule,
     HttpClientModule // Ajoutez HttpClientModule aux imports
   ],
   providers: [

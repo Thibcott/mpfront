@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   dialogAddPersonne: boolean;
   dialogEditPersonne: boolean;
   dialogPrint: boolean;
+  dialogHistory: boolean;
 
   Genre: any
   Prenom: any;
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
   suppVac: any = 0;
 
   totBrut: any = 0;//
+  newTotBrut: any = 0;
 
   avsaiapg: any = 5.3;
   ac: any = 1.1;
@@ -66,6 +68,16 @@ export class AppComponent implements OnInit {
   salaireNet: any = 0;
   freePrompt: string = "";
   freeMontant: number;
+  retraite: any;
+
+  valRetaite: any = "non";
+
+  cRetraie: any[] = [
+    { label: 'non', value: 'non' },
+    { label: 'oui', value: 'oui' }
+  ];
+  hist: any;
+  Liste: any;
 
 
 
@@ -79,41 +91,41 @@ export class AppComponent implements OnInit {
     this.getPersonnes();
     this.initialiserMois();
     this.getPersonnes();
-    //enlever apres 
-    this.calcSal();
+
   }
- //calculate data of tab
-  // calcSal() {
-  //   this.salaireHoraire = Number((this.workHour * this.base).toFixed(2));
-  //   this.suppVac = Number(((this.salaireHoraire / 100) * this.pourcentVac).toFixed(2));
-  //   this.totBrut = Number((this.salaireHoraire + this.suppVac + this.divers).toFixed(2));
 
-  //   this.avsaiapgM = Number(((this.totBrut / 100) * this.avsaiapg).toFixed(2))
-  //   this.acM = Number(((this.totBrut / 100) * this.ac).toFixed(2))
-  //   this.aanpM = Number(((this.totBrut / 100) * this.aanp).toFixed(2))
-  //   this.afamM = Number(((this.totBrut / 100) * this.afam).toFixed(2))
-  //   this.impotSourceM = Number(((this.totBrut / 100) * this.impotSource).toFixed(2))
-  //   this.lppM = Number(((this.totBrut / 100) * this.lpp).toFixed(2))
-
-  //   this.totdeductions = Number((this.avsaiapgM + this.acM + this.aanpM + this.afamM + this.impotSourceM + this.lppM).toFixed(2));
-
-  //   this.salaireNet = Number((this.totBrut - this.totdeductions).toFixed(2))
-  // }
   calcSal() {
     this.salaireHoraire = (this.workHour * this.base).toFixed(2);
     this.suppVac = ((Number(this.salaireHoraire) / 100) * this.pourcentVac).toFixed(2);
     this.totBrut = (Number(this.salaireHoraire) + Number(this.suppVac) + Number(this.divers) + Number(this.freeMontant)).toFixed(2);
 
-    this.avsaiapgM = ((Number(this.totBrut / 100)) * Number(this.avsaiapg)).toFixed(2)
-    this.acM = ((Number(this.totBrut / 100)) * Number(this.ac)).toFixed(2)
-    this.aanpM = ((Number(this.totBrut / 100)) * Number(this.aanp)).toFixed(2)
-    this.afamM = ((Number(this.totBrut / 100)) * Number(this.afam)).toFixed(2)
-    this.impotSourceM = ((Number(this.totBrut) / 100) * Number(this.impotSource)).toFixed(2)
-    this.lppM = ((Number(this.totBrut / 100)) * Number(this.lpp)).toFixed(2)
+    if (this.retraite == "oui") {
+      console.log(this.retraite);
+
+
+      console.log("totBrut", typeof (Number(this.totBrut)))
+      console.log(Number(this.totBrut))
+
+      console.log("new", typeof (Number(this.newTotBrut)))
+      console.log(Number(this.newTotBrut))
+
+      this.newTotBrut = (Number(this.totBrut) - 1400).toFixed(2);
+
+      // this.calcSal();
+    } else {
+      this.newTotBrut = this.totBrut
+    }
+    console.log("calc function :", this.newTotBrut)
+    this.avsaiapgM = ((Number(this.newTotBrut / 100)) * Number(this.avsaiapg)).toFixed(2)
+    this.acM = ((Number(this.newTotBrut / 100)) * Number(this.ac)).toFixed(2)
+    this.aanpM = ((Number(this.newTotBrut / 100)) * Number(this.aanp)).toFixed(2)
+    this.afamM = ((Number(this.newTotBrut / 100)) * Number(this.afam)).toFixed(2)
+    this.impotSourceM = ((Number(this.newTotBrut) / 100) * Number(this.impotSource)).toFixed(2)
+    this.lppM = ((Number(this.newTotBrut / 100)) * Number(this.lpp)).toFixed(2)
 
     this.totdeductions = (Number(this.avsaiapgM) + Number(this.acM) + Number(this.aanpM) + Number(this.afamM) + Number(this.impotSourceM) + Number(this.lppM)).toFixed(2);
 
-    this.salaireNet =(Number(this.totBrut) - Number(this.totdeductions)).toFixed(2)
+    this.salaireNet = (Number(this.totBrut) - Number(this.totdeductions)).toFixed(2)
   }
 
 
@@ -141,7 +153,7 @@ export class AppComponent implements OnInit {
     this.dialogAddPersonne = true;
   }
   showDialogEditPersonne(element: any) {
-    // console.log(element)
+    console.log(element)
     this.dialogEditPersonne = true;
 
     this.id = element.id
@@ -153,6 +165,28 @@ export class AppComponent implements OnInit {
     this.Adresse = element.data.Adress
   }
 
+  // showDialogHistory(element:any) {
+  //   this.getHistory(element.id)
+  //   console.log(this.hist);
+
+
+  // }
+
+  getHistory(element: any) {
+    this.hist = "";
+    this.dataService.gethist(element.id).subscribe((response: any) => {
+      this.hist = response;
+      console.log(this.hist)
+      this.dialogHistory = true;
+      this.Prenom = element.data.prenom
+      this.Nom = element.data.nom
+      this.Liste = this.hist
+    }, (error: any) => {
+      console.log(error);
+    });
+  }
+
+
 
 
 
@@ -161,13 +195,15 @@ export class AppComponent implements OnInit {
   }
 
   addPersonne() {
+    console.log(this.valRetaite)
     let data = {
       "genre": this.Genre,
       "prenom": this.Prenom,
       "nom": this.Nom,
       "contact": this.Contact,
       "AVS": this.AVS,
-      "Adress": this.Adresse
+      "Adress": this.Adresse,
+      "retraite": this.valRetaite
     }
     this.dataService.addData(data).subscribe((response: any) => {
       if (response.status == true) {
@@ -188,7 +224,8 @@ export class AppComponent implements OnInit {
       "nom": this.Nom,
       "contact": this.Contact,
       "AVS": this.AVS,
-      "Adress": this.Adresse
+      "Adress": this.Adresse,
+      "Retraite": this.valRetaite
     }
 
     this.dataService.editPersonne(data, this.id).subscribe((response: any) => {
@@ -236,9 +273,10 @@ export class AppComponent implements OnInit {
     })
   }
 
-  showPrint(element) {
+  showPrint(element: any) {
+    console.log(element)
     this.dialogPrint = true;
-
+    
     this.id = element.id
     this.Genre = element.data.genre
     this.Prenom = element.data.prenom
@@ -246,15 +284,18 @@ export class AppComponent implements OnInit {
     this.Contact = element.data.contact
     this.AVS = element.data.AVS
     this.Adresse = element.data.Adress
+    this.retraite = element.data.Retraite
+    console.log(this.retraite);
 
-    this.workHour = 0;
-    this.base = 22;
+    this.workHour = element.workHour
+
+    this.base = 25.26;
     this.salaireHoraire = 0;
     this.pourcentVac = 8.83;
     this.suppVac = 0;
     this.divers = 0;
-    this.freePrompt ="";
-    this.freeMontant =0;
+    this.freePrompt = "";
+    this.freeMontant = 0;
 
     this.totBrut = 0;
 
@@ -271,14 +312,62 @@ export class AppComponent implements OnInit {
     this.impotSourceM = 0;
     this.lppM = 0;
     this.totdeductions = 0;
+  
+    this.calcSal();
   }
+
+
+  showOldPrint(element:any ){
+    console.log(element.id)
+    this.dialogPrint = true;
+
+    this.id = element.data.id_personne 
+    this.Genre = element.data.genre
+    this.Prenom = element.data.prenom
+    this.Nom = element.data.nom
+    this.Contact = element.data.contact
+    this.AVS = element.data.AVS
+    this.Adresse = element.data.Adress
+    this.retraite = element.data.Retraite
+    console.log(this.retraite);
+
+    this.workHour = element.data.workHour
+
+
+    this.base = element.data.base;
+    this.salaireHoraire = element.data.salaireHoraire;
+    this.pourcentVac =element.data.pourcentVac;
+    this.suppVac = element.data.suppVac;
+    this.divers = element.data.divers;
+    this.freePrompt = element.data.freePrompt;
+    this.freeMontant = element.data.freeMontant;
+
+    this.totBrut = element.data.totBrut;
+
+    this.avsaiapg = element.data.avsaiapg;
+    this.ac = element.data.ac;
+    this.aanp = element.data.aanp;
+    this.afam = element.data.afam;
+    this.impotSource = element.data.impotSource;
+    this.lpp = element.data.lpp;
+    this.avsaiapgM = element.data.avsaiapgM;
+    this.acM = element.data.acM;
+    this.aanpM = element.data.aanp;
+    this.afamM = element.data.afamM;
+    this.impotSourceM = element.data.impotSourceM;
+    this.lppM = element.data.lppM;
+    this.totdeductions = element.data.totdeductions;
+    this.calcSal();
+
+  }
+
 
   print() {
     console.log("print !")
     console.log('Mois sélectionné : ', this.moisSelectionne.label);
     console.log(this.id);
     let fiche = {
-      "idPersonne":this.id,
+      "idPersonne": this.id,
       "genre": this.Genre,
       "prenom": this.Prenom,
       "nom": this.Nom,
@@ -296,6 +385,7 @@ export class AppComponent implements OnInit {
       "freePrompt": this.freePrompt,
       "freeMontant": this.freeMontant,
       "totBrut": this.totBrut,
+      "newtotBrut": this.newTotBrut,
       "avsaiapg": this.avsaiapg,
       "ac": this.ac,
       "aanp": this.aanp,
@@ -342,8 +432,7 @@ export class AppComponent implements OnInit {
     this.AVS = ''
     this.Adresse = ''
     this.annee = this.dateDuJour.getFullYear();
+    this.totBrut = 0;
+    this.newTotBrut = 0;
   }
-
-
-
 }
